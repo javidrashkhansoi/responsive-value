@@ -1,0 +1,149 @@
+/*
+ * Copyright (c) 2024 Javid Gulmaliyev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+@use "sass:meta";
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+
+$default-unit: px;
+
+$behavior-values: (
+  unfixed: "not-fixed",
+  both: "fixed-both",
+  start: "fixed-start-value",
+  end: "fixed-end-value"
+);
+
+/**
+ * SCSS function responsive-value.
+ * It is intended to handle responsive CSS property values without using media queries
+ *
+ * @access public
+ * @author Javid Gulmaliyev
+ *
+ * @param {number} $start-value - The initial value of the property. Accepts only numeric values without units. Cannot be equal to $end-value.
+ * @param {number} $end-value - The final value of the property. Accepts only numeric values without units. Cannot be equal to $start-value.
+ * @param {number} $start-breakpoint - The initial breakpoint. At this breakpoint, the property value will be equal to $start-value. Accepts only positive numeric values without units. Cannot be less than or equal to $end-breakpoint.
+ * @param {number} $end-breakpoint - The final breakpoint. At this breakpoint, the property value will be equal to $end-value. Accepts only positive numeric values or 0 (zero) without units. Cannot be greater than or equal to $start-breakpoint.
+ * @param {string} $behavior - Accepts 4 values:
+ *   - "not-fixed": The $start-value and $end-value properties are not fixed before and after breakpoints.
+ *   - "fixed-both": The $start-value and $end-value properties are strictly fixed before and after breakpoints.
+ *   - "fixed-start-value": At this value, $start-value is strictly fixed before $start-breakpoint. Default value.
+ *   - "fixed-end-value": At this value, $end-value is strictly fixed after $end-breakpoint.
+ * @param {string} $unit - CSS unit for numeric values. Default is "px". When changing the unit, $start-value, $end-value, $start-breakpoint, and $end-breakpoint should be written in the format of the specified unit.
+ *
+ * @return {string} One of the CSS mathematical functions: min(), max(), clamp().
+ *
+ * @example
+ * .element {
+ *     font-size: responsive-value(2, 1, 768 / 16, 375 / 16, "fixed-both", "rem");
+ *     margin-bottom: responsive-value(20, 10, 768, 375, "fixed-end-value", "px");
+ *     margin-bottom: responsive-value(30, 15, 1440, 280);
+ * }
+ *
+ * @throw {error} If $start-value, $end-value, $start-breakpoint, or $end-breakpoint are not numeric or have units.
+ * @throw {error} If $start-value and $end-value are equal.
+ * @throw {error} If $start-breakpoint is less than or equal to zero.
+ * @throw {error} If $end-breakpoint is a negative number.
+ * @throw {error} If $start-breakpoint is less than $end-breakpoint.
+ * @throw {error} If $start-breakpoint is equal to $end-breakpoint.
+ * @throw {error} If the value of $behavior is incorrect.
+ */
+@function responsive-value(
+  $start-value,
+  $end-value,
+  $start-breakpoint,
+  $end-breakpoint,
+  $behavior: map.get($behavior-values, start),
+  $unit: $default-unit
+) {
+  @each $key,
+    $value
+      in (
+        start-value: $start-value,
+        end-value: $end-value,
+        start-breakpoint: $start-breakpoint,
+        end-breakpoint: $end-breakpoint
+      )
+  {
+    @if meta.type-of($value) != number or math.is-unitless($value) == false {
+      @error "The value of $#{$key} (#{$value}) should be of type number without units";
+    }
+  }
+
+  @if $start-value == $end-value {
+    @error "$start-value (#{$start-value}) and $end-value (#{$end-value}) cannot be equal";
+  }
+
+  @if not($start-breakpoint > 0) {
+    @error "$start-breakpoint (#{$start-breakpoint}) cannot be equal to or less than zero";
+  }
+
+  @if $end-breakpoint < 0 {
+    @error "$end-breakpoint (#{$end-breakpoint}) cannot less than zero";
+  }
+
+  @if $start-breakpoint < $end-breakpoint {
+    @error "$end-breakpoint (#{$end-breakpoint}) cannot be greater than $start-breakpoint (#{$start-breakpoint})";
+  }
+
+  @if $start-breakpoint == $end-breakpoint {
+    @error "$end-breakpoint (#{$end-breakpoint}) cannot be equal to $start-breakpoint (#{$start-breakpoint})";
+  }
+
+  @if list.index(map.values($behavior-values), $behavior) == null {
+    @error "The value of $behavior (#{$behavior}) is incorrect. It can be \"not-fixed\", \"fixed-both\", \"fixed-start-value\", or \"fixed-end-value\"";
+  }
+
+  $start-value-unit: $start-value + $unit;
+  $end-value-unit: $end-value + $unit;
+  $end-breakpoint-unit: $end-breakpoint + $unit;
+  $value-difference: $start-value - $end-value;
+  $breakpoint-difference: $start-breakpoint - $end-breakpoint;
+  $calc: "#{$end-value-unit} + #{$value-difference} * ((100vw - #{$end-breakpoint-unit}) / #{$breakpoint-difference})";
+  $value: "";
+
+  @if $behavior == map.get($behavior-values, unfixed) {
+    $value: calc(#{$calc});
+  } @else {
+    @if $start-value > $end-value {
+      @if $behavior == map.get($behavior-values, both) {
+        $value: clamp(#{$end-value-unit}, #{$calc}, #{$start-value-unit});
+      } @else if $behavior == map.get($behavior-values, start) {
+        $value: min(#{$start-value-unit}, #{$calc});
+      } @else if $behavior == map.get($behavior-values, end) {
+        $value: max(#{$end-value-unit}, #{$calc});
+      }
+    } @else if $start-value < $end-value {
+      @if $behavior == map.get($behavior-values, both) {
+        $value: min(#{$end-value-unit}, max(#{$calc}, #{$start-value-unit}));
+      } @else if $behavior == map.get($behavior-values, start) {
+        $value: max(#{$start-value-unit}, #{$calc});
+      } @else if $behavior == map.get($behavior-values, end) {
+        $value: min(#{$end-value-unit}, #{$calc});
+      }
+    }
+  }
+
+  @return $value;
+}
