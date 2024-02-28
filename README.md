@@ -3,7 +3,14 @@
 The SCSS function `responsive-value` is created to facilitate working with responsive CSS property values without using media queries.
 
 ```scss
-@function responsive-value($start-value, $end-value, $start-breakpoint, $end-breakpoint, $behavior: "fixed-start-value", $unit: "px") {
+@function responsive-value(
+  $start-value,
+  $end-value,
+  $start-breakpoint,
+  $end-breakpoint,
+  $behavior: "fixed-start-value",
+  $unit: "px"
+) {
   // ...
 }
 ```
