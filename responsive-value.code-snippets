@@ -1,0 +1,26 @@
+{
+  "responsive-value call": {
+    "scope": "scss",
+    "prefix": ["rv", "responsive-value"],
+    "body": "responsive-value(${1:start-value}, ${2:end-value}, ${3:start-breakpoint}, ${4:end-breakpoint})",
+    "description": "responsive-value() call"
+  },
+  "expanded responsive-value call": {
+    "scope": "scss",
+    "prefix": ["rve", "responsive-value expanded"],
+    "body": "responsive-value(${1:start-value}, ${2:end-value}, ${3:start-breakpoint}, ${4:end-breakpoint}, ${5|\"fixed-start-value\",\"fixed-both\",\"not-fixed\",\"fixed-end-value\"|}, ${6|\"px\",\"rem\"|})",
+    "description": "Expanded responsive-value() call"
+  },
+  "responsive-value behaviors": {
+    "scope": "scss",
+    "prefix": ["rvb", "responsive-value behaviors"],
+    "body": "${1|\"fixed-start-value\",\"fixed-both\",\"not-fixed\",\"fixed-end-value\"|}",
+    "description": "responsive-value() $behavior parameter values"
+  },
+  "responsive-value units": {
+    "scope": "scss",
+    "prefix": ["rvu", "responsive-value units"],
+    "body": "${1|\"px\",\"rem\"|}",
+    "description": "responsive-value() $unit parameter values"
+  }
+}
