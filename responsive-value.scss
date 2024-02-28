@@ -34,8 +34,8 @@ $behavior-values: (
  *
  * @example
  * .element {
- *     font-size: responsive-value(2, 1, 768 / 16, 375 / 16, "fixed-both", "rem");
- *     margin-bottom: responsive-value(20, 10, 768, 375, "fixed-end-value", "px");
+ *     font-size: responsive-value(2, 1, 48, 23.4375, "fixed-both", "rem");
+ *     padding: responsive-value(20, 10, 768, 375, "fixed-end-value", "px");
  *     margin-bottom: responsive-value(30, 15, 1440, 280);
  * }
  *

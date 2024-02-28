@@ -13,8 +13,8 @@ The SCSS function `responsive-value` is created to facilitate working with respo
 ```scss
 .element {
   font-size: responsive-value(2, 1, 48, 23.4375, "fixed-both", "rem");
-  margin-bottom: responsive-value(20, 10, 48, 23.4375, "fixed-end-value", "px");
-  margin-bottom: responsive-value(30, 15, 90, 17.5);
+  padding: responsive-value(20, 10, 768, 375, "fixed-end-value", "px");
+  margin-bottom: responsive-value(30, 15, 1440, 280);
 }
 ```
 
