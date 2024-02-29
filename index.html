@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html class="page" lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="description" content="The SCSS function 'responsive-value' is created to facilitate working with responsive CSS property values without using media queries.">
+  <title>Responsive Value Generator</title>
+  <link rel="stylesheet" href="src/style.min.css">
+  <link rel="shortcut icon" href="data:,">
+</head>
+
+<body class="page__body body">
+  <div class="body__wrapper">
+    <main class="body__main main">
+      <section class="main__generator generator" aria-labelledby="section-title">
+        <div class="generator__container">
+          <h1 class="generator__title" id="section-title">Responsive Value Generator</h1>
+          <form action="#" class="generator__form form" id="generator-form">
+            <div class="form__item">
+              <label class="form__label" for="start-value">Start value</label>
+              <input class="form__input" id="start-value" name="start-value" type="number" inputmode="numeric" autocomplete="off" value="32" placeholder="Start value">
+            </div>
+            <div class="form__item">
+              <label class="form__label" for="end-value">End value</label>
+              <input class="form__input" id="end-value" name="end-value" type="number" inputmode="numeric" autocomplete="off" value="16" placeholder="End value">
+            </div>
+            <div class="form__item">
+              <label class="form__label" for="start-breakpoint">Start breakpoint</label>
+              <input class="form__input" id="start-breakpoint" name="start-breakpoint" type="number" inputmode="numeric" autocomplete="off" min="1" value="768" placeholder="Start breakpoint">
+            </div>
+            <div class="form__item">
+              <label class="form__label" for="end-breakpoint">End breakpoint</label>
+              <input class="form__input" id="end-breakpoint" name="end-breakpoint" type="number" inputmode="numeric" autocomplete="off" min="0" value="375" placeholder="End breakpoint">
+            </div>
+            <div class="form__item">
+              <label class="form__label" for="behavior">Behavior</label>
+              <select class="form__select" id="behavior" name="behavior" autocomplete="off">
+                <option value="not-fixed">not-fixed</option>
+                <option value="fixed-both">fixed-both</option>
+                <option value="fixed-start-value" selected>fixed-start-value</option>
+                <option value="fixed-end-value">fixed-end-value</option>
+              </select>
+            </div>
+            <div class="form__item">
+              <label class="form__label" for="unit">Unit</label>
+              <select class="form__select" id="unit" name="unit" autocomplete="off">
+                <option value="px" selected>px</option>
+                <option value="rem">rem</option>
+              </select>
+            </div>
+          </form>
+          <div class="generator__output output">
+            <h2 class="output__title">Output</h2>
+            <code class="output__code">
+              font-size: <span>min(32px, 16px + 16 * ((100vw - 375px) / 393))</span>;
+            </code>
+          </div>
+          <div class="generator__demo demo">
+            <h2 class="demo__title">Demo</h2>
+            <div class="demo__info info">
+              <div class="info__item">
+                <h3 class="info__title">Current width</h3>
+                <div class="info__value" data-info="width"></div>
+              </div>
+              <div class="info__item">
+                <h3 class="info__title">Current font size</h3>
+                <div class="info__value" data-info="font-size"></div>
+              </div>
+            </div>
+            <p class="demo__text">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum debitis tenetur voluptatum corrupti reiciendis non numquam autem excepturi est rem, beatae ea! Ex culpa totam, minus
+              officiis laboriosam tempore ducimus?
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="src/script.js"></script>
+</body>
+
+</html>
