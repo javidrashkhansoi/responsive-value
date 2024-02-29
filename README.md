@@ -1,10 +1,10 @@
 # SCSS `responsive-value` Function
 
+The SCSS function `responsive-value` is created to facilitate working with responsive CSS property values without using media queries.
+
 - [Function](responsive-value.scss)
 - [Generator](https://javidrashkhansoi.github.io/responsive-value/)
 - [Snippets](responsive-value.code-snippets)
-
-The SCSS function `responsive-value` is created to facilitate working with responsive CSS property values without using media queries.
 
 ```scss
 @function responsive-value(
